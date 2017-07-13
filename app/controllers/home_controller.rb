@@ -145,11 +145,6 @@ before_action :check, except: [:index]
       @myticketsapibooked = "Ticket Booking is unsuccessful. Please contact support team"
     end
     #@myticketsapibooked = (HTTParty.get("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets", :query => {:identify=>@username.userid}, headers: {"Authorization" => "Token token=\"HHHcSv22p8ta36kOrxHhIwtt\""}).parsed_response).paginate(:page => params[:page], :per_page => 5)
-    
-    #@gone = HTTParty.get("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets/", :query => {:identify=>@username.userid}, headers: {"Authorization" => "Token token=\"HHHcSv22p8ta36kOrxHhIwtt\""}).parsed_response
-    #@myticketdisplay = @gone.last
-    #print("last ticket")
-    #print(@myticketdisplay)
   end
   
   def tickethistory
