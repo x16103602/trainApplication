@@ -1,0 +1,2 @@
+module LongtrainsHelper
+end

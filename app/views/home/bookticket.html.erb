@@ -1,0 +1,57 @@
+<%#= render 'example' %>
+
+<%#= simple_form_for(payment_url) do |f| %>
+  <%#= f.input :name, label: 'Customer Name', :input_html => {:style=> 'width: 300px'}%>
+  <%#= f.input :age, label: 'age',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :cticket, label: 'Child ticket',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :aticket, label: 'Adult Ticket',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :tfrom, label: 'Travel From',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :tto, label: 'Travel To',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :tclass, label: 'Travel Class',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.input :treturn, label: 'With Return',:input_html => {:style=> 'width: 300px'} %>
+  <%#= f.button :submit, label: 'Book Ticket', class: "btn btn-primary" %>
+
+<%= form_tag "/payment" do %>
+<h1>Please Fill your ticket details</h1>
+<br>
+
+  <div class="field">
+  <strong>  <%= label_tag 'name' %> </strong>&nbsp; <%= text_field_tag :name %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag :age %> </strong> &nbsp;<%= number_field_tag :age %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag 'child ticket' %> </strong> &nbsp;<%= number_field_tag :cticket %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag 'Adult Ticket' %> </strong> &nbsp;<%= number_field_tag :aticket %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag 'Travel From' %></strong> &nbsp;<%= select_tag(:tfrom, options_for_select([['Central','Central'],['Beach Station','Beach Station'],['Park Station','Park Station'],['Fort Station','Fort Station'],['Egmore','Egmore'],['Nungabakkam','Nungabakkam'],['Chetpet','Chetpet'],['Kodambakkam','Kodambakkam'],['Mambalam','Mambalam'],['Saidpet','Saidpet'],['Guindy','Guindy'],['St Mount','St Mount'],['Tirisulam','Tirisulam'],['Minambakkam','Minambakkam'],['Chrompet','Chrompet'],['Tambaram','Tambaram']])) %>
+  </div>
+  <br>
+  <div class="field">
+    <%= label_tag 'Travel To' %></strong> &nbsp;<%= select_tag(:tto, options_for_select([['Central','central'],['Beach Station','Beach Station'],['Park Station','Park Station'],['Fort Station','Fort Station'],['Egmore','Egmore'],['Nungabakkam','Nungabakkam'],['Chetpet','Chetpet'],['Kodambakkam','Kodambakkam'],['Mambalam','Mambalam'],['Saidpet','Saidpet'],['Guindy','Guindy'],['St Mount','St Mount'],['Tirisulam','Tirisulam'],['Minambakkam','Minambakkam'],['Chrompet','Chrompet'],['Tambaram','Tambaram']])) %>
+  </div>
+  <br>
+  <div class="field">
+  <strong>  <%= label_tag 'Travel Class' %></strong> &nbsp;<%= select_tag(:tclass, options_for_select([['First Class','First Class'],['Second Class','Second Class']])) %>
+  </div>
+  <div class="field">
+   <strong> Return Ticket:</strong> &nbsp;<%= check_box_tag(:treturn, "With Return Ticket") %>
+  </div>
+  <div class="field">
+  <strong>Note: Travel should be commenced within 4hrs, i.e. Before <%= Time.now+4.hours %></strong>
+  </div>
+  
+<center>
+  <div class="actions">
+    <%= submit_tag 'Confirm Ticket',class: "btn btn-danger"  %> <tab></tab> <%= link_to 'Back to Home', home_url,class: "btn btn-danger"  %>
+  </div>
+</center>
+<% end %>

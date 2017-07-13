@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rtocken: MyString
+  btocken: MyString
+  category: MyString
+  boarding: MyString
+  destination: MyString
+  location: MyString
+  datetime: 2017-07-06
+  seat: 1
+  custID: MyString
+  user: one
+
+two:
+  rtocken: MyString
+  btocken: MyString
+  category: MyString
+  boarding: MyString
+  destination: MyString
+  location: MyString
+  datetime: 2017-07-06
+  seat: 1
+  custID: MyString
+  user: two

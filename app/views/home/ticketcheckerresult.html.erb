@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></td></div><br>
+
+<h3 class="text-center">Yours tickets</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <% @checker.each do |ticketchecking| %>
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+    <div class="field"><td><strong>Passenger Name :</td></strong> <td> <%= ticketchecking["name"] %></td></div><br>
+    <div class="field"><td><strong>Age :</td></strong> <td> <%= ticketchecking["age"] %></td></div><br>
+    <div class="field"><td><strong>Child ticket :</td></strong> <td> <%= ticketchecking["aticket"] %></td></div><br>
+    <div class="field"><td><strong>Adult ticket :</td></strong> <td> <%= ticketchecking["cticket"] %></td></div><br>
+    <div class="field"><td><strong>Travel From :</td></strong> <td> <%= ticketchecking["from"] %></td></div><br>
+    <div class="field"><td><strong>Travel To :</td></strong> <td> <%= ticketchecking["to"] %></td></div><br>
+    <div class="field"><td><strong>Travel Class :</td></strong> <td> <%= ticketchecking["tclass"] %></td></div><br>
+    <div class="field"><td><strong>Valid Until Hour :</td></strong> <td> <%= ticketchecking["hour"] %> (24-hour)</td></div><br>
+    <div class="field"><td><strong>Valid Until Date :</td></strong> <td> <%= ticketchecking["tdate"] %></td></div><br>
+    <div class="field"><td><strong>Return Ticket :</td></strong> <td> <%= ticketchecking["treturn"] %></td></div><br>
+    <div class="field"><td><strong>Unique Proof :</td></strong> <td> <%= ticketchecking["proof"] %></td></div><br>
+    <div class="field"><td><strong>Total Price :</td></strong> <td> <%= ticketchecking["cost"] %></td></div>
+            </center>
+          </div>
+        </div>
+        </div>
+    <% end %>
+  </div>
+</div>
+<center>
+        <%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+        <strong><%= will_paginate @checker %></strong>
+</center>
+<%# ticketchecking.each_pair do |key, value| %>
+                  <%#= key %> <%#= value %>
+                <%# end %>

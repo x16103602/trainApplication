@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></td></div><br>
+
+<h3 class="text-center">Yours tickets</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <% @myticketsapihistory.each do |ticketfromapi| %>
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+    <div class="field"><td><strong>Passenger Name :</td></strong> <td> <%= ticketfromapi["name"] %></td></div><br>
+    <div class="field"><td><strong>Age :</td></strong> <td> <%= ticketfromapi["age"] %></td></div><br>
+    <div class="field"><td><strong>Child ticket :</td></strong> <td> <%= ticketfromapi["aticket"] %></td></div><br>
+    <div class="field"><td><strong>Adult ticket :</td></strong> <td> <%= ticketfromapi["cticket"] %></td></div><br>
+    <div class="field"><td><strong>Travel From :</td></strong> <td> <%= ticketfromapi["from"] %></td></div><br>
+    <div class="field"><td><strong>Travel To :</td></strong> <td> <%= ticketfromapi["to"] %></td></div><br>
+    <div class="field"><td><strong>Travel Class :</td></strong> <td> <%= ticketfromapi["tclass"] %></td></div><br>
+    <div class="field"><td><strong>Valid Until Hour :</td></strong> <td> <%= ticketfromapi["hour"] %> (24-hour)</td></div><br>
+    <div class="field"><td><strong>Valid Until Date :</td></strong> <td> <%= ticketfromapi["tdate"] %></td></div><br>
+    <div class="field"><td><strong>Return Ticket :</td></strong> <td> <%= ticketfromapi["treturn"] %></td></div><br>
+    <div class="field"><td><strong>Unique Proof :</td></strong> <td> <%= ticketfromapi["proof"] %></td></div><br>
+    <div class="field"><td><strong>Total Price :</td></strong> <td> <%= ticketfromapi["cost"] %></td></div>
+            </center>
+          </div>
+        </div>
+        </div>
+    <% end %>
+  </div>
+</div>
+<center>
+        <%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+        <strong><%= will_paginate @myticketsapihistory %></strong>
+</center>
+<%# ticketfromapi.each_pair do |key, value| %>
+                  <%#= key %> <%#= value %>
+                <%# end %>

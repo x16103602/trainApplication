@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trainapp</title>
+    <%#= csrf_meta_tags %>
+
+    <%#= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%#= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <% if request.ssl? %>
+    <%= stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' %>
+    <%= javascript_include_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js' %>
+  <% else %>
+    <%= stylesheet_link_tag 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' %>
+    <%= javascript_include_tag 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js' %>
+  <% end %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+
+  <%= csrf_meta_tags %>
+<style>
+body {margin: 0;}
+
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    text-align: center;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display:inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {background-color: #111;}
+
+ul.topnav li a.active {background-color: #4CAF50;   display:inline-block;
+    float: none;  text-align: center; }
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+    ul.topnav li.right, 
+    ul.topnav li {float: none;}
+}
+tab1 { padding-left: 8em; }
+tab2 { padding-right: 8em; }
+body {
+    background-color: lightblue;
+}
+pre1 {
+    background-color: lightblue;
+}
+
+</style>
+  </head>
+
+  <body>
+    <ul class="topnav" font-color="white">
+    
+    <% flash.each do |name, msg| %>
+    <%= content_tag :div, msg, class: name %>
+    <% end %>
+    <% if current_user %>
+    
+   <li class="right"><font color="white"> Signed in as <%= current_user.name %>  </font>
+   
+    <%= link_to "Sign out", signout_path, id: "sign_out" %></li>
+    
+    <%#<% else %>
+    <%#= link_to "Sign in with Twitter", "/auth/twitter" %>
+    <% end %>
+    </ul>
+    <%= yield %>
+  </body>
+</html>

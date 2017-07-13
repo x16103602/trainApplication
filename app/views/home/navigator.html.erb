@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<h3 class="text-center">Login using your social network logins</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+              <td><%= link_to "Book Tickets", bookticket_path,class: "btn btn-primary" %>  </td>
+              <td><%= link_to "Ticket History", tickethistory_path,class: "btn btn-primary" %> </td>
+              <td><%= link_to "Book Long Travel Train", new_longtrain_path,class: "btn btn-primary" %> </td>
+              
+              <td><%#= link_to 'Close your Store', store_detail, method: :delete, data: { confirm: 'Your Shop will Permenently Deleted' },class: "btn btn-danger"if policy(store_detail).destroy?%></td>
+        </center>
+          </div>
+        </div>
+        
+      </div>
+  </div>
+</div>

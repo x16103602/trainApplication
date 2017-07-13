@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <h1>Payment Invoice</h1>
+<style>
+  html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+  
+}
+</style>
+</head>
+
+<h3 class="text-center">Confirm your ticket and Procced to Pay</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <% @ticketdetails.each do |ticket| %>
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+                  <td><strong><%= ticket[0] %> :</strong></td><td> &nbsp; &nbsp; <%= ticket[1] %></td>
+            </center>
+          </div>
+        </div>
+        </div>
+    <% end %>
+  </div>
+  
+</div>
+
+<%= form_tag stripecash_path do %>
+  <center>
+  <article>
+    <% if flash[:error].present? %>
+      <div id="error_explanation">
+        <p><%= flash[:error] %></p>
+      </div>
+    <% end %>
+    
+    <label class="amount">
+      <span>Amount to Pay : <%= number_to_currency(@ticketdetails[11][1],unit: "£")%></span>
+    </label>
+  </article>
+
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+          data-description="Payment for <%= ((@ticketdetails[2][1]).to_i+(@ticketdetails[3][1]).to_i)%> Ticket"
+          data-amount="<%= ((@ticketdetails[11][1])*100)%>"
+          data-bitcoin="true"
+          data-locale="auto"></script>  |  <%= link_to 'Back to Modify Ticket', bookticket_url,class: "btn btn-danger"  %>
+
+  </center>
+<% end %>
+</body>
+</html>

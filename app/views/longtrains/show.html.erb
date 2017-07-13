@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+<center>
+<pre1> 
+<p>
+  <strong>Customer Name:</strong>   <%= @longtrain.custID %>
+</p>
+
+<p>
+  <strong>Boarding:</strong>              <%= @longtrain.boarding %>
+</p>
+
+<p>
+  <strong>Destination:</strong>          <%= @longtrain.destination %>
+</p>
+
+<p>
+  <strong>Date of Travel:</strong>      <%= @longtrain.datetime %>
+</p>
+
+<p>
+  <strong>No of Seats:</strong>         <%= @longtrain.seat %>
+</p>
+</pre1>
+</center>
+<%= form_tag longtrainbook_path do %>
+  <center>
+  <article>
+    <% if flash[:error].present? %>
+      <div id="error_explanation">
+        <p><%= flash[:error] %></p>
+      </div>
+    <% end %>
+    
+    <label class="amount">
+      <span>Amount to Pay : <%= number_to_currency(((@longtrain.seat).to_i)*15,unit: "£")%></span>
+    </label>
+    <%= link_to 'Back to Modify Ticket', edit_longtrain_path(@longtrain) ,class: "btn btn-danger"  %> 
+    <%= link_to 'View Ticket History', longtrains_path ,class: "btn btn-danger"  %>
+        
+  </article>
+<br>
+  <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+          data-description="Payment for <%= @longtrain.boarding %> to <%= @longtrain.destination%> Ticket"
+          data-amount="<%= ((((@longtrain.seat).to_i)*15)*100)%>"
+          data-bitcoin="true"
+          data-locale="auto"></script>
+  </center>
+<% end %>
+

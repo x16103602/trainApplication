@@ -1,0 +1,16 @@
+<%= form_tag "/ticketcheckerresult" do %>
+<h1>Passenger Ticket Checking</h1>
+<br>
+
+  <div class="field">
+  <strong>  <%= label_tag 'Type Customer Proof ID' %> </strong>&nbsp; <%= text_field_tag :customer_id %>
+  </div>
+  <br>
+<center>
+  <div class="actions">
+    <%= submit_tag 'Find Tickets',class: "btn btn-danger"  %> <tab></tab> <%= link_to 'Back to Home', home_url,class: "btn btn-danger"  %>
+  </div>
+</center>
+<% end %>
+
+

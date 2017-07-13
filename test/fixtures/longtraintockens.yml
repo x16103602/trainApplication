@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rtocken: MyString
+  userauth: MyString
+
+two:
+  rtocken: MyString
+  userauth: MyString

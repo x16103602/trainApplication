@@ -1,0 +1,29 @@
+<%= simple_form_for(@longtrain) do |f| %>
+  <% if @longtrain.errors.any? %>
+    <div id="error_explanation">
+      <h2><%#= pluralize(@longtrain.errors.count, "error") %> Looks like you have missed the below field:</h2>
+
+      <ul>
+      <% @longtrain.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-inputs">
+    <%= f.input :boarding, label: 'Boarding Location/ Departure' %>
+    <%= f.input :destination, label: 'Destination' %>
+    <%= f.input :datetime, label: 'Date of Travel' %>
+    <%= f.input :seat, label: 'No of Seats Required' %>
+    <%= f.input :custID, label: 'Customer Name' %>
+    <%#= f.hidden_field :user_id, value: @userid %>
+    <%#= f.input :user_id, :as => :hidden, :input_html => { :value => 1 } %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, label: 'Book Tickets' %>
+  </div>
+<% end %>
+<%= link_to 'View Ticket History', longtrains_path ,class: "btn btn-danger"  %> | 
+<%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+

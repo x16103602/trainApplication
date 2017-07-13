@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h3 class="text-center">Ticket History</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+    <% @longtrainticketsarray.each do |longtrainindo| %>
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+            <% longtrainindo.each do |long| %>
+              <% if ((long[0] == "boarding") || (long[0] == "destination") || (long[0] == "datetime") || (long[0] == "seat") || (long[0] == "boarding")) %>
+               <pre><strong> <%= long[0] %>  : </strong> <%= long[1] %></pre>
+                <br>
+              <% end %>
+            <% end %>
+            </center>
+          </div>
+        </div>
+        <center>
+        <td><%= link_to 'Cancel Ticket', longtraincancellation_path(longtrainindo), data: { confirm: 'Are you sure?' },class: "btn btn-danger"%></td>
+        </center>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<center>
+        <%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+        <strong><%#= will_paginate @longtrainsindex %></strong>
+</center>
+<br>
+<center>
+<%= link_to 'Purchase new ticket', new_longtrain_path,class: "btn btn-primary" %>
+</center>

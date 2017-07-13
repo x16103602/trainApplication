@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h3 class="text-center">Payment is Successful</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+      
+    <%# @longtrainbookingview.each do |longtrain| %>
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-xs-15">
+            <center><h2>Your Confirmed Ticket Details</h2>
+                <strong>Customer Name:</strong>  :  <%= @longtrainbookingview[0] %><br>
+                <strong>Boarding:</strong>  :  <%= @longtrainbookingview[1] %><br>
+                <strong>Destination:</strong>  :  <%= @longtrainbookingview[2] %><br>
+                <strong>Date of Travel:</strong>  :  <%= @longtrainbookingview[3] %><br>
+                <strong>No of Seats:</strong>  :  <%= @longtrainbookingview[4] %><br>
+            </center>
+          </div>
+        </div>
+        <center>
+        <td><%#= link_to 'Cancel Ticket', longtrain_cancel_path(longtrain), data: { confirm: 'Are you sure?' },class: "btn btn-danger"%></td>
+        </center>
+      </div>
+    <%# end %>
+  </div>
+</div>
+
+<br>
+<center>
+<%= link_to 'Purchase new ticket', new_longtrain_path,class: "btn btn-primary" %> |
+<%= link_to 'View Ticket History', longtrains_path ,class: "btn btn-danger"  %> | 
+<%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+<strong><%#= will_paginate @longtrainsindex %></strong>
+</center>
+
+    
