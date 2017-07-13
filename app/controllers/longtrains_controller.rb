@@ -95,10 +95,11 @@ class LongtrainsController < ApplicationController
   end
 
   def longtraincancel
-    @longtraincancellationcall = HTTParty.post("http://87.44.4.210:8080/api/rest/service/cancelBooking", :body => {:rtocken => params[:rtocken], :btocken => params[:btocken]}.to_json, :headers => {"Content-Type" => "application/json" })
+    @longtraincancellationcall = HTTParty.delete("http://87.44.4.210:8080/api/rest/service/deleteBooking", :body => {:rtocken => params[:rtocken], :btocken => params[:btocken]}.to_json, :headers => {"Content-Type" => "application/json" })
     print(@longtraincancellationcall.response)
-    if(@longtraincancellationcall.code == 200)
-      @longtrainindo.destroy
+    if(@longtraincancellationcall.code == 200 || @longtraincancellationcall.code == 204)
+      @deleteticket = Longtrain.find_by btocken: params[:btocken]
+      @deleteticket.destroy
       respond_to do |format|
         format.html { redirect_to longtrainindex_url, notice: 'Longtrain was successfully destroyed.' }
         format.json { head :no_content }

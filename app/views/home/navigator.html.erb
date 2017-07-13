@@ -8,10 +8,28 @@
         <div class="row">
           <div class="col-xs-15">
             <center>
+              <h4>For Local Travel Trains: </h4>
               <td><%= link_to "Book Tickets", bookticket_path,class: "btn btn-primary" %>  </td>
               <td><%= link_to "Ticket History", tickethistory_path,class: "btn btn-primary" %> </td>
+            </center>
+          </div>
+        </div>
+        
+      </div>
+  </div>
+</div>
+<br>
+
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+              <h4>For Long Travel Trains:</h4>
               <td><%= link_to "Book Long Travel Train", new_longtrain_path,class: "btn btn-primary" %> </td>
-              
+              <td><%= link_to "Long Train Ticket History", longtrainindex_path,class: "btn btn-primary" %> </td>
               <td><%#= link_to 'Close your Store', store_detail, method: :delete, data: { confirm: 'Your Shop will Permenently Deleted' },class: "btn btn-danger"if policy(store_detail).destroy?%></td>
         </center>
           </div>

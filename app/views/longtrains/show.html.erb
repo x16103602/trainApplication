@@ -35,7 +35,7 @@
       <span>Amount to Pay : <%= number_to_currency(((@longtrain.seat).to_i)*15,unit: "£")%></span>
     </label>
     <%= link_to 'Back to Modify Ticket', edit_longtrain_path(@longtrain) ,class: "btn btn-danger"  %> 
-    <%= link_to 'View Ticket History', longtrains_path ,class: "btn btn-danger"  %>
+    <%= link_to 'View Ticket History', longtrainindex_path ,class: "btn btn-danger"  %>
         
   </article>
 <br>
