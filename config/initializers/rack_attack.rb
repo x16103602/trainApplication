@@ -45,28 +45,28 @@ class Rack::Attack
   end
 
   # Throttle requests to 5 requests per second per ip
-  Rack::Attack.throttle('req/ip', :limit => 5, :period => 1.second) do |req|
+  #Rack::Attack.throttle('req/ip', :limit => 5, :period => 100.second) do |req|
     # If the return value is truthy, the cache key for the return value
     # is incremented and compared with the limit. In this case:
     #   "rack::attack:#{Time.now.to_i/1.second}:req/ip:#{req.ip}"
     #
     # If falsy, the cache key is neither incremented nor checked.
-    req.ip
-  end
+   # req.ip
+  #end
 
   # Throttle login attempts for a given email parameter to 6 reqs/minute
   # Return the email as a discriminator on POST /login requests
-  Rack::Attack.throttle('logins/email', :limit => 6, :period => 60.seconds) do |req|
-    req.params['email'] if req.path == '/login' && req.post?
-  end
+  #Rack::Attack.throttle('logins/email', :limit => 6, :period => 60.seconds) do |req|
+   # req.params['email'] if req.path == '/login' && req.post?
+  #end
 
   # You can also set a limit and period using a proc. For instance, after
   # Rack::Auth::Basic has authenticated the user:
-  limit_proc = proc {|req| req.env["REMOTE_USER"] == "admin" ? 100 : 1}
-  period_proc = proc {|req| req.env["REMOTE_USER"] == "admin" ? 1.second : 1.minute}
-  Rack::Attack.throttle('req/ip', :limit => limit_proc, :period => period_proc) do |req|
-    req.ip
-  end
+  #limit_proc = proc {|req| req.env["REMOTE_USER"] == "admin" ? 100 : 1}
+  #period_proc = proc {|req| req.env["REMOTE_USER"] == "admin" ? 1.second : 1.minute}
+  #Rack::Attack.throttle('req/ip', :limit => limit_proc, :period => period_proc) do |req|
+   # req.ip
+  #end
 
   # Track requests from a special user agent.
   Rack::Attack.track("special_agent") do |req|
@@ -92,7 +92,7 @@ class Rack::Attack
     [ 503, {}, ['Blocked']]
   end
 
-  Rack::Attack.throttled_response = lambda do |env|
+  #Rack::Attack.throttled_response = lambda do |env|
     # NB: you have access to the name and other data about the matched throttle
     #  env['rack.attack.matched'],
     #  env['rack.attack.match_type'],
@@ -100,21 +100,21 @@ class Rack::Attack
 
     # Using 503 because it may make attacker think that they have successfully
     # DOSed the site. Rack::Attack returns 429 for throttling by default
-    [ 503, {}, ["Server Error\n"]]
-  end
+   # [ 503, {}, ["Server Error\n"]]
+  #end
 
-  Rack::Attack.throttled_response = lambda do |env|
-    now = Time.now
-    match_data = env['rack.attack.match_data']
+  #Rack::Attack.throttled_response = lambda do |env|
+   # now = Time.now
+    #match_data = env['rack.attack.match_data']
 
-    headers = {
-      'X-RateLimit-Limit' => match_data[:limit].to_s,
-      'X-RateLimit-Remaining' => '0',
-      'X-RateLimit-Reset' => (now + (match_data[:period] - now.to_i % match_data[:period])).to_s
-    }
+    #headers = {
+     # 'X-RateLimit-Limit' => match_data[:limit].to_s,
+      #'X-RateLimit-Remaining' => '0',
+      #'X-RateLimit-Reset' => (now + (match_data[:period] - now.to_i % match_data[:period])).to_s
+    #}
 
-    [ 429, headers, ["Throttled\n"]]
-  end
+    #[ 429, headers, ["Throttled\n"]]
+  #end
 
   ActiveSupport::Notifications.subscribe('rack.attack') do |name, start, finish, request_id, req|
     puts req.inspect
