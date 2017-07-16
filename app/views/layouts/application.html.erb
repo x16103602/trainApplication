@@ -68,6 +68,12 @@ pre1 {
     <% flash.each do |name, msg| %>
     <%= content_tag :div, msg, class: name %>
     <% end %>
+    <% if current_user && current_user.admin? %>
+          <li><%= link_to "Admin Panel",admin_path %><li>
+    <%end%>
+    <% if current_user && current_user.checker? %>
+          <li><%= link_to "Checker Console",checker_path %><li>
+    <%end%>
     <% if current_user %>
     
    <li class="right"><font color="white"> Signed in as <%= current_user.name %>  </font>
