@@ -50,8 +50,9 @@
 
   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-          data-description="Payment for <%= ((@ticketdetails[2][1]).to_i+(@ticketdetails[3][1]).to_i)%> Ticket"
+          data-description="Payment for <%= ((@ticketdetails[2][1]).to_i+(@ticketdetails[3][1]).to_i) %> Ticket"
           data-amount="<%= ((@ticketdetails[11][1])*100)%>"
+          data-currency="eur"
           data-bitcoin="true"
           data-locale="auto"></script>  |  <%= link_to 'Back to Modify Ticket', bookticket_url,class: "btn btn-danger"  %>
 

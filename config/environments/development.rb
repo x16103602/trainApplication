@@ -56,6 +56,14 @@ Rails.application.configure do
   API_TWITTER_KEY = Rails.application.secrets.API_TWITTER_KEY
   API_TWITTER_SECRET = Rails.application.secrets.API_TWITTER_SECRET
 
+  REDIS_URL = Rails.application.secrets.REDIS_URL
+  
+  
+  config.cache_store = :redis_store, "#{Rails.application.secrets.REDIS_URL}/1"
+  config.action_dispatch.rack_cache = {
+      metastore:   "#{Rails.application.secrets.REDIS_URL}/1/metastore",
+      entitystore: "#{Rails.application.secrets.REDIS_URL}/1/entitystore"
+  }
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.

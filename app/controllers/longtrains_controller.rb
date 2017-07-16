@@ -9,7 +9,7 @@ class LongtrainsController < ApplicationController
   
   def longtraincreation
     @username = User.find(current_user.id)
-    @trainobjectposting = HTTParty.post("http://87.44.4.210:8080/api/rest/service/register/", :body => {:id => "", :detail => "Train Ticket Registration", :seatCount => params[:seatCount], :startDate => params[:startDate], :endDate => params[:endDate], :filledSeates => params[:filledSeates], :rType => "Train", :username => "Chennai Railways", :rtocken => ""}.to_json, :headers => {"Content-Type" => "application/json" })
+    @trainobjectposting = HTTParty.post($redis.get("api_register"), :body => {:id => "", :detail => "Train Ticket Registration", :seatCount => params[:seatCount], :startDate => params[:startDate], :endDate => params[:endDate], :filledSeates => params[:filledSeates], :rType => "Train", :username => "Chennai Railways", :rtocken => ""}.to_json, :headers => {"Content-Type" => "application/json" })
     print(JSON.parse(@trainobjectposting.body))
     if(@trainobjectposting.code == 200) then
       @rtockenstorage = Longtraintocken.new()
@@ -41,7 +41,7 @@ class LongtrainsController < ApplicationController
     customer = Stripe::Customer.create(:email => params[:stripeEmail], :source  => params[:stripeToken])
     charge = Stripe::Charge.create(:customer => customer.id, :amount => @amount, :description => 'Rails Stripe customer', :currency => 'eur')
     #print(charge)
-    @longtrainbookpostres = HTTParty.post("http://87.44.4.210:8080/api/rest/service/booking", :body => {:rtocken => @longtraintegistrationtocken.rtocken, :btocken => "", :category => "SuperFast Trains", :boarding => @longtrainbook.boarding, :destination =>  @longtrainbook.destination, :location =>  @longtrainbook.location, :datetime =>  @longtrainbook.datetime, :seat => seatNos, :custId =>  @longtrainbook.custID, :detail =>  "Kishore Company", :id => ""}.to_json, :headers => {"Content-Type" => "application/json" })
+    @longtrainbookpostres = HTTParty.post($redis.get("api_book"), :body => {:rtocken => @longtraintegistrationtocken.rtocken, :btocken => "", :category => "SuperFast Trains", :boarding => @longtrainbook.boarding, :destination =>  @longtrainbook.destination, :location =>  @longtrainbook.location, :datetime =>  @longtrainbook.datetime, :seat => seatNos, :custId =>  @longtrainbook.custID, :detail =>  "Kishore Company", :id => ""}.to_json, :headers => {"Content-Type" => "application/json" })
     print(@longtrainbookpostres.response)
     print(JSON.parse(@longtrainbookpostres.body))
     if(@longtrainbookpostres.code == 200) then
@@ -80,7 +80,7 @@ class LongtrainsController < ApplicationController
     if(@longtrainindexcheck) then
       @longtrainindexcheck.each do |check|
         #print(@mycounter)
-        @longtrainticketsarrayforpost = HTTParty.post("http://87.44.4.210:8080/api/rest/service/getbooking", :body => {:rtocken => check.rtocken, :btocken => check.btocken}.to_json, :headers => {"Content-Type" => "application/json" })
+        @longtrainticketsarrayforpost = HTTParty.post($redis.get("api_show"), :body => {:rtocken => check.rtocken, :btocken => check.btocken}.to_json, :headers => {"Content-Type" => "application/json" })
         print(@longtrainticketsarrayforpost.response)
         print(JSON.parse(@longtrainticketsarrayforpost.body))
         @longtrainticketsarray[@mycounter] = JSON.parse(@longtrainticketsarrayforpost.body)
@@ -95,7 +95,7 @@ class LongtrainsController < ApplicationController
   end
 
   def longtraincancel
-    @longtraincancellationcall = HTTParty.delete("http://87.44.4.210:8080/api/rest/service/deleteBooking", :body => {:rtocken => params[:rtocken], :btocken => params[:btocken]}.to_json, :headers => {"Content-Type" => "application/json" })
+    @longtraincancellationcall = HTTParty.delete($redis.get("api_delete"), :body => {:rtocken => params[:rtocken], :btocken => params[:btocken]}.to_json, :headers => {"Content-Type" => "application/json" })
     print(@longtraincancellationcall.response)
     if(@longtraincancellationcall.code == 200 || @longtraincancellationcall.code == 204)
       @deleteticket = Longtrain.find_by btocken: params[:btocken]
@@ -118,7 +118,7 @@ class LongtrainsController < ApplicationController
   def index
     @longtrains = Longtrain.all
     #@longtrainalltickets = HTTParty.post("http://87.44.4.210:8080/api/rest/service/getbooking", :body => {:rtocken => Longtrainbookingtocken.first.rtocken, :btocken => Longtraintocken.first.btocken}.to_json, :headers => {"Content-Type" => "application/json" })
-    @longtrainget = (HTTParty.get("http://87.44.4.210:8080/api/rest/service/bookings").parsed_response)
+    @longtrainget = (HTTParty.get($redis.get("api_index")).parsed_response)
     @longtrainsindex = JSON.parse(@longtrainget).paginate(:page => params[:page], :per_page => 5)
     print(@longtrainsindex)
   end
@@ -179,7 +179,7 @@ class LongtrainsController < ApplicationController
   # DELETE /longtrains/1
   # DELETE /longtrains/1.json
   def destroy
-    @booktrainresponse = HTTParty.post("http://87.44.4.210:8080/api/rest/service/cancelBookings", :body => {:rtocken => Longtraintocken.first.rtocken, :btocken => Longtrainbookingtocken.first.btocken}.to_json, :headers => {"Content-Type" => "application/json" })
+    @booktrainresponse = HTTParty.post($redis.get("api_cancel"), :body => {:rtocken => Longtraintocken.first.rtocken, :btocken => Longtrainbookingtocken.first.btocken}.to_json, :headers => {"Content-Type" => "application/json" })
     if(@trainobjectposting.response == 200)
       @longtrain.destroy
     else

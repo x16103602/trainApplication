@@ -1,4 +1,7 @@
+require 'resque/server'
 Rails.application.routes.draw do
+  mount Resque::Server.new, at: "/resque"
+  mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   resources :longtrains
   resources :tickets
   resources :charges
@@ -16,11 +19,13 @@ Rails.application.routes.draw do
   match 'home', to: 'home#navigator', via: [:get, :post]
   
   match 'longtraincreation', to: 'longtrains#longtraincreation', via: [:get, :post]
-  match 'admin', to: 'longtrains#traininstantiation', via: [:get, :post]
+  match 'administrator', to: 'longtrains#traininstantiation', via: [:get, :post]
   match 'longtrainbook', to: 'longtrains#longtrainbook', via: [:get, :post]
   match 'showonly', to: 'longtrains#showonly', via: [:get, :post]
   match 'longtrainindex', to: 'longtrains#longtrainindex', via: [:get, :post]
   match 'longtraincancellation', to: 'longtrains#longtraincancel', via: [:get, :post]
+  
+  match 'pdfticket', to: 'home#pdfticket', via: [:get, :post]
   
   resources :homes
   root "home#index" 

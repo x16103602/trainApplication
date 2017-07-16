@@ -22,7 +22,7 @@ before_action :check, except: [:index]
   end
   
   def ticketcheckerresult
-    @checker = (HTTParty.get("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets", :query => {:identify=>params[:customer_id]}, headers: {"Authorization" => "Token token=\"VfboRuOu7GuE0yz5lofIaAtt\""}).parsed_response).paginate(:page => params[:page], :per_page => 5)
+    @checker = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>params[:customer_id]}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response).paginate(:page => params[:page], :per_page => 5)
   end
   
   
@@ -122,35 +122,50 @@ before_action :check, except: [:index]
     rescue Stripe::CardError => e
       flash[:error] = e.message
       redirect_to payment_path
-    
-    #redirect_to ticketconfirmation_path
   end
   
   def ticketconfirmation
     @username = User.find(current_user.id)
     @tickettopost = Ticket.where(user_id: current_user.id).order('id desc').take(1)
-    print("Result of Ticket to be posted and username")
-    print(@tickettopost)
-    print(@username)
     
-    @resultofticket = HTTParty.post("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets.json", :body => { :bookticket => {:name => @tickettopost[0].name, :age => @tickettopost[0].age, :aticket => @tickettopost[0].aticket, :cticket => @tickettopost[0].cticket, :tdate => @tickettopost[0].tvdate, :hour => @tickettopost[0].tvhour, :from => @tickettopost[0].tfrom, :to => @tickettopost[0].tto, :proof => @tickettopost[0].proof, :cost => @tickettopost[0].price, :tclass => @tickettopost[0].tclass, :treturn => @tickettopost[0].treturn}}.to_json, :headers => {"Authorization" => "Token token=\"HHHcSv22p8ta36kOrxHhIwtt\"", "Content-Type" => "application/json" })
-    @checking = @resultofticket.response
-    print("Result of Post :")
-    print(JSON.parse(@resultofticket.body))
-    print(@checking)
+    @resultofticket = HTTParty.post($redis.get("myapiurl"), :body => { :bookticket => {:name => @tickettopost[0].name, :age => @tickettopost[0].age, :aticket => @tickettopost[0].aticket, :cticket => @tickettopost[0].cticket, :tdate => @tickettopost[0].tvdate, :hour => @tickettopost[0].tvhour, :from => @tickettopost[0].tfrom, :to => @tickettopost[0].tto, :proof => @tickettopost[0].proof, :cost => @tickettopost[0].price, :tclass => @tickettopost[0].tclass, :treturn => @tickettopost[0].treturn}}.to_json, :headers => {"Authorization" => $redis.get("api_authorize"), "Content-Type" => "application/json" })
     
     if(@resultofticket.code == 201 || @resultofticket.code == 200)
       @myticketsapibooked = JSON.parse(@resultofticket.body)
     else
       @myticketsapibooked = "Ticket Booking is unsuccessful. Please contact support team"
     end
-    #@myticketsapibooked = (HTTParty.get("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets", :query => {:identify=>@username.userid}, headers: {"Authorization" => "Token token=\"HHHcSv22p8ta36kOrxHhIwtt\""}).parsed_response).paginate(:page => params[:page], :per_page => 5)
+    
+    $redis.set("myticketdownload", @myticketsapibooked)
+    
+    @myticketsapihistoryres = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>@username.userid}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response)
+    $redis.set("myticketshistroy", @myticketsapihistoryres.reverse)
+  end
+  
+  def pdfticket
+    # Using URI and Net:HTTP which are already included with Rails
+
+    pdf = WickedPdf.new.pdf_from_string(render_to_string('home/ticketconfirmation.html.erb', layout: false))
+    send_data pdf, :filename => "resume.pdf", :type => "application/pd", :disposition => "attachment"
+    
+    #pdf = render_to_string :pdf => $redis.get("myticketdownload"), :template => "home/ticketconfirmation.html.erb", :encoding => "UTF-8" # here show is a show.pdf.erb inside view
+    #send_data pdf
+    
+    #respond_to do |format|
+     # format.html
+      #format.pdf do
+       # @pdf = render_to_string :pdf => $redis.get("myticketdownload")
+        #    #:encoding => "UTF-8"
+        #send_data(@pdf, :filename => "Ticket Summary", :type=>"application/pdf")
+      #end
+    #end  
+    
+    # Results are returned as a JSON object
+    #redirect_to Net::HTTP.get_response(uri).body
   end
   
   def tickethistory
-    @username = User.find(current_user.id)
-    @myticketsapihistoryres = (HTTParty.get("https://guarded-reaches-19746.herokuapp.com/api/v1/booktickets", :query => {:identify=>@username.userid}, headers: {"Authorization" => "Token token=\"HHHcSv22p8ta36kOrxHhIwtt\""}).parsed_response)
-    @myticketsapihistory = (@myticketsapihistoryres.reverse).paginate(:page => params[:page], :per_page => 5)
-    print(@myticketsapihistory)
+    @myticketsapihistory = (JSON.load ($redis.get("myticketshistroy"))).paginate(:page => params[:page], :per_page => 5)
+    #(Resque.enqueue(Queueing, $redis.get("myticketshistroy"))).paginate(:page => params[:page], :per_page => 5) 
   end
 end

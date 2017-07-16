@@ -32,5 +32,7 @@
 </div>
 <center>
         <%= link_to 'Back to Home Page', home_url,class: "btn btn-danger"  %> &nbsp; &nbsp;
+        <%#= link_to 'Download Ticket', { :action => "pdfticket", :format => :pdf },class: "btn btn-danger"  %> &nbsp; &nbsp;
+        <%#= link_to 'download', pdfticket_path(@myticketsapibooked) %>
         <strong><%#= will_paginate @myticketsapibooked %></strong>
 </center>

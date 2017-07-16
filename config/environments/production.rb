@@ -88,7 +88,15 @@ Rails.application.configure do
   API_GOOGLE_SECRET = Rails.application.secrets.API_GOOGLE_SECRET
   API_TWITTER_KEY = Rails.application.secrets.API_TWITTER_KEY
   API_TWITTER_SECRET = Rails.application.secrets.API_TWITTER_SECRET
-
+  
+  REDIS_URL = Rails.application.secrets.REDIS_URL
+  
+  
+  config.cache_store = :redis_store, "#{Rails.application.secrets.REDIS_URL}/1"
+  config.action_dispatch.rack_cache = {
+      metastore:   "#{Rails.application.secrets.REDIS_URL}/1/metastore",
+      entitystore: "#{Rails.application.secrets.REDIS_URL}/1/entitystore"
+  }
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
@@ -96,6 +104,7 @@ Rails.application.configure do
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
