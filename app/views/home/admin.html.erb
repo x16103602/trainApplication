@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+<br>
+<br>
+<br>
+<h3 class="text-center">Welcome Admin Dashboard</h3>
+<div class="row">
+  <div class="col-xs-6 col-xs-offset-3">
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-25">
+            <center>
+              <td><%= link_to "Long Train instantiation", administrator_path, class: "btn btn-danger" %></td>
+            </center>
+          </div>
+        </div>
+        
+      </div>
+  </div>
+  <div class="col-xs-6 col-xs-offset-3">
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+              <td><%= link_to "Application Admin Dashboard", rails_admin_path, class: "btn btn-primary" %> </td>
+            </center>
+          </div>
+        </div>
+        
+      </div>
+  </div>
+
+  <div class="col-xs-6 col-xs-offset-3">
+      <div class="jumbotron">
+    
+        <div class="row">
+          <div class="col-xs-15">
+            <center>
+              <td><%= link_to "Queue & Topics Dashboard", @resqueurl, class: "btn btn-primary" %>  </td>
+            </center>
+          </div>
+        </div>
+        
+      </div>
+  </div>
+
+</div>

@@ -3,9 +3,14 @@
 <br>
 
   <div class="field">
-  <strong>  <%= label_tag 'Type Customer Proof ID' %> </strong>&nbsp; <%= text_field_tag :customer_id %>
+  <strong>  <%= label_tag 'Type Customer Proof ID from ticket' %> </strong>&nbsp; <%= text_field_tag :customer_id %>
   </div>
-  <br>
+  <h4> OR </h4>
+  <div class="field">
+  <strong>  <%= label_tag 'Type Customer Name from ticket' %> </strong>&nbsp; <%= text_field_tag :customer_name %>
+  </div>
+
+Note: Check the ticket for proof id and customer name
 <center>
   <div class="actions">
     <%= submit_tag 'Find Tickets',class: "btn btn-danger"  %> <tab></tab> <%= link_to 'Back to Home', home_url,class: "btn btn-danger"  %>

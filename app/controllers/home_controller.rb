@@ -6,11 +6,21 @@ class HomeController < ApplicationController
 before_action :check, except: [:index]
 
   def index
+    @username = User.find(current_user.id)
     if current_user
     redirect_to home_url
     end
+    @myticketsapihistoryres = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>@username.userid}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response)
+    $redis.set("myticketshistroy", (@myticketsapihistoryres.reverse))
   end
   
+  def admin
+    if Rails.env == 'production'
+      @resqueurl = "https://chennaimetro.herokuapp.com/resque"
+    else
+      @resqueurl = "http://apiapp-spkishore007.c9users.io:8080/resque"
+    end
+  end
   def navigator
     @x = "welcome to train app"
     if current_user
@@ -22,7 +32,12 @@ before_action :check, except: [:index]
   end
   
   def ticketcheckerresult
-    @checker = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>params[:customer_id]}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response).paginate(:page => params[:page], :per_page => 5)
+    if(params[:customer_id])
+      @checker = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>params[:customer_id]}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response).paginate(:page => params[:page], :per_page => 5)
+    end
+    if(params[:customer_name])
+      @checker = (HTTParty.get($redis.get("myapiurl"), :query => {:custname=>params[:customer_name]}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response).paginate(:page => params[:page], :per_page => 5)
+    end
   end
   
   
@@ -113,15 +128,15 @@ before_action :check, except: [:index]
   def stripecash
     @username = User.find(current_user.id)
     @tickettopost = Ticket.where(user_id: current_user.id).order('id desc').take(1)
+    @queue = []
     print(@ticketdetails)
     print(@username)
     
     @amount = (@tickettopost[0].price)*100
-    customer = Stripe::Customer.create(:email => params[:stripeEmail], :source  => params[:stripeToken])
-    charge = Stripe::Charge.create(:customer => customer.id, :amount => @amount, :description => 'Rails Stripe customer', :currency => 'eur')
-    rescue Stripe::CardError => e
-      flash[:error] = e.message
-      redirect_to payment_path
+    @queue[0] = (@tickettopost[0].price)*100
+    @queue[1] = params[:stripeEmail]
+    @queue[2] = params[:stripeToken]
+    Resque.enqueue(Queueing, @queue)
   end
   
   def ticketconfirmation
@@ -139,7 +154,7 @@ before_action :check, except: [:index]
     $redis.set("myticketdownload", @myticketsapibooked)
     
     @myticketsapihistoryres = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>@username.userid}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response)
-    $redis.set("myticketshistroy", @myticketsapihistoryres.reverse)
+    $redis.set("myticketshistroy", (@myticketsapihistoryres.reverse).to_json)
   end
   
   def pdfticket
@@ -165,7 +180,6 @@ before_action :check, except: [:index]
   end
   
   def tickethistory
-    @myticketsapihistory = (JSON.load ($redis.get("myticketshistroy"))).paginate(:page => params[:page], :per_page => 5)
-    #(Resque.enqueue(Queueing, $redis.get("myticketshistroy"))).paginate(:page => params[:page], :per_page => 5) 
+    @myticketsapihistory = (JSON.load($redis.get("myticketshistroy"))).paginate(:page => params[:page], :per_page => 5)
   end
 end
