@@ -6,12 +6,9 @@ class HomeController < ApplicationController
 before_action :check, except: [:index]
 
   def index
-    @username = User.find(current_user.id)
     if current_user
     redirect_to home_url
     end
-    @myticketsapihistoryres = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>@username.userid}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response)
-    $redis.set("myticketshistroy", (@myticketsapihistoryres.reverse))
   end
   
   def admin
@@ -23,9 +20,13 @@ before_action :check, except: [:index]
   end
   def navigator
     @x = "welcome to train app"
+    @username = User.find(current_user.id)
+    
     if current_user
     @d = current_user.name
     end
+    @myticketsapihistoryres = (HTTParty.get($redis.get("myapiurl"), :query => {:identify=>@username.userid}, headers: {"Authorization" => $redis.get("api_authorize")}).parsed_response)
+    $redis.set("myticketshistroy", (@myticketsapihistoryres.reverse))
   end
   
   def ticketcheck

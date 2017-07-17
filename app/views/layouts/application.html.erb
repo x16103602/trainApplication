@@ -54,6 +54,7 @@ tab1 { padding-left: 8em; }
 tab2 { padding-right: 8em; }
 body {
     background-color: lightblue;
+    background-image: url('met.jpg');
 }
 pre1 {
     background-color: lightblue;
@@ -74,12 +75,16 @@ pre1 {
     <% if current_user && current_user.checker? %>
           <li><%= link_to "Checker Console",checker_path %><li>
     <%end%>
+    <%= link_to 'Home', home_url %>
+  
     <% if current_user %>
     
    <li class="right"><font color="white"> Signed in as <%= current_user.name %>  </font>
    
     <%= link_to "Sign out", signout_path, id: "sign_out" %></li>
     
+    
+
     <%#<% else %>
     <%#= link_to "Sign in with Twitter", "/auth/twitter" %>
     <% end %>
