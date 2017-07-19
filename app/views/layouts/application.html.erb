@@ -70,12 +70,12 @@ pre1 {
     <%= content_tag :div, msg, class: name %>
     <% end %>
     <% if current_user && current_user.admin? %>
-          <li><%= link_to "Admin Panel",admin_path %><li>
+          <li><%= link_to "Admin Panel",admin_path %><li> |
     <%end%>
     <% if current_user && current_user.checker? %>
-          <li><%= link_to "Checker Console",checker_path %><li>
+          <li><%= link_to "Checker Console",checker_path %><li> |
     <%end%>
-    <%= link_to 'Home', home_url %>
+    <%= link_to 'Home',home_url %>
   
     <% if current_user %>
     

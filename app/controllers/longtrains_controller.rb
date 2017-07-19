@@ -3,7 +3,6 @@ require 'json'
 class LongtrainsController < ApplicationController
   include HTTParty
   before_action :set_longtrain, only: [:show, :edit, :update, :destroy]
-
   def traininstantiation
   end
   
@@ -16,6 +15,14 @@ class LongtrainsController < ApplicationController
       @rtockenstorage.rtocken = (JSON.parse(@trainobjectposting.body))["rtocken"]
       @rtockenstorage.seatcounter =params[:seatCount]
       @rtockenstorage.userauth = @username.userid
+      @rtockenstorage.to =params[:to]
+      @rtockenstorage.from = params[:from]
+      if(Longtraintocken.last)
+        c = Longtraintocken.last.counter + 1
+      else
+        c = 0
+      end
+      @rtockenstorage.counter = c
       @rtockenstorage.save
       @outfromtrainpost = "Successfully Registered. Please start using it"
     else
@@ -26,8 +33,13 @@ class LongtrainsController < ApplicationController
   def longtrainbook
     seatNos = []
     @username = User.find(current_user.id)
-    @longtrainbook = Longtrain.last
-    @longtraintegistrationtocken = Longtraintocken.first
+    @longtrainbook = Longtrain.find($redis.get("api_bookid#{current_user.id}"))
+    @longtraintegistrationtockencheck = Longtraintocken.where(from: @longtrainbook.boarding).where(to: @longtrainbook.destination)
+    if(@longtraintegistrationtockencheck)
+      @longtraintegistrationtocken = @longtraintegistrationtockencheck[0]
+    else
+      @longtraintegistrationtocken = Longtraintocken.last
+    end
     seatNos = (@longtraintegistrationtocken.seatcounter - 1).to_s
     if(@longtrainbook.seat > 1)
       for i in 2..@longtrainbook.seat
@@ -35,18 +47,19 @@ class LongtrainsController < ApplicationController
         seatNos << ((@longtraintegistrationtocken.seatcounter) - i).to_s
       end
     end
+    print(seatNos)
     @longtraintegistrationtocken.seatcounter = @longtraintegistrationtocken.seatcounter - @longtrainbook.seat
     @longtraintegistrationtocken.save
     @amount = ((@longtrainbook.seat)*15)*100
     customer = Stripe::Customer.create(:email => params[:stripeEmail], :source  => params[:stripeToken])
     charge = Stripe::Charge.create(:customer => customer.id, :amount => @amount, :description => 'Rails Stripe customer', :currency => 'eur')
-    #print(charge)
+    print(@longtraintegistrationtocken.rtocken)
     @longtrainbookpostres = HTTParty.post($redis.get("api_book"), :body => {:rtocken => @longtraintegistrationtocken.rtocken, :btocken => "", :category => "SuperFast Trains", :boarding => @longtrainbook.boarding, :destination =>  @longtrainbook.destination, :location =>  @longtrainbook.location, :datetime =>  @longtrainbook.datetime, :seat => seatNos, :custId =>  @longtrainbook.custID, :detail =>  "Kishore Company", :id => ""}.to_json, :headers => {"Content-Type" => "application/json" })
     print(@longtrainbookpostres.response)
     print(JSON.parse(@longtrainbookpostres.body))
     if(@longtrainbookpostres.code == 200) then
       @longtrainbook.btocken = (JSON.parse(@longtrainbookpostres.body))["btocken"]
-      @longtrainbook.rtocken = Longtraintocken.first.rtocken
+      @longtrainbook.rtocken = @longtraintegistrationtocken.rtocken
       @longtrainbook.save
       @btockenstorage = Longtrainbookingtocken.new()
       @btockenstorage.btocken = (JSON.parse(@longtrainbookpostres.body))["btocken"]
@@ -127,7 +140,9 @@ class LongtrainsController < ApplicationController
   # GET /longtrains/1.json
   def show
     @longtrain.cost= @longtrain.seat*15
+    $redis.set("api_bookid#{current_user.id}", @longtrain.id)
     @longtrain.save
+    
     print(@longtrain)
   end
 

@@ -15,6 +15,12 @@
   </div>
   <br>
   <div class="field">
+    <%= label_tag 'Source' %> </strong> &nbsp;<%= select_tag(:from, options_for_select([['Chennai','Chennai'],['Madurai','Madurai'],['Coimbator','Coimbator'],['Trichy','Trichy'],['Hyderabad','Hyderabad'],['Kochin','Kochin'],['Trivandram','Trivandram'],['Allapey','Allapey'],['Bangalore','Bangalore'],['Mangalore','Mangalore'],['Mysore','Mysore'],['Delhi','Delhi'],['Mumbai','Mumbai'],['Kolkata','Kolkata'],['Ranchi','Ranchi'],['Gurgon','Gurgon']])) %>
+  </div>
+  <div class="field">
+    <%= label_tag 'Destination' %> </strong> &nbsp;<%= select_tag(:to, options_for_select([['Chennai','Chennai'],['Madurai','Madurai'],['Coimbator','Coimbator'],['Trichy','Trichy'],['Hyderabad','Hyderabad'],['Kochin','Kochin'],['Trivandram','Trivandram'],['Allapey','Allapey'],['Bangalore','Bangalore'],['Mangalore','Mangalore'],['Mysore','Mysore'],['Delhi','Delhi'],['Mumbai','Mumbai'],['Kolkata','Kolkata'],['Ranchi','Ranchi'],['Gurgon','Gurgon']])) %>
+  </div>
+  <div class="field">
     <%= label_tag 'Already filled seates' %> </strong> &nbsp;<%= number_field_tag :filledSeates %>
   </div>
 <center>

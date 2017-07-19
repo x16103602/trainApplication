@@ -11,8 +11,8 @@
     </div>
   <% end %>
   <div class="form-inputs">
-    <%= f.input :boarding, label: 'Boarding Location/ Departure' %>
-    <%= f.input :destination, label: 'Destination' %>
+    <%= f.input :boarding, label: 'Boarding Location/ Departure', :collection => [['Chennai','Chennai'],['Madurai','Madurai'],['Coimbator','Coimbator'],['Trichy','Trichy'],['Hyderabad','Hyderabad'],['Kochin','Kochin'],['Trivandram','Trivandram'],['Allapey','Allapey'],['Bangalore','Bangalore'],['Mangalore','Mangalore'],['Mysore','Mysore'],['Delhi','Delhi'],['Mumbai','Mumbai'],['Kolkata','Kolkata'],['Ranchi','Ranchi'],['Gurgon','Gurgon']]  %>
+    <%= f.input :destination, label: 'Destination', :collection => [['Chennai','Chennai'],['Madurai','Madurai'],['Coimbator','Coimbator'],['Trichy','Trichy'],['Hyderabad','Hyderabad'],['Kochin','Kochin'],['Trivandram','Trivandram'],['Allapey','Allapey'],['Bangalore','Bangalore'],['Mangalore','Mangalore'],['Mysore','Mysore'],['Delhi','Delhi'],['Mumbai','Mumbai'],['Kolkata','Kolkata'],['Ranchi','Ranchi'],['Gurgon','Gurgon']]  %>
     <%= f.input :datetime, label: 'Date of Travel' %>
     <%= f.input :seat, label: 'No of Seats Required' %>
     <%= f.input :custID, label: 'Customer Name' %>
@@ -21,7 +21,7 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, label: 'Book Tickets' %>
+    <%= f.button :submit, 'Book Tickets', class: "my-button" %>
   </div>
 <% end %>
 <%= link_to 'View Ticket History', longtrainindex_path ,class: "btn btn-danger"  %> | 

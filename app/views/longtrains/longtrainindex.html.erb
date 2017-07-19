@@ -14,12 +14,12 @@
                 <br>
               <% end %>
             <% end %>
+            <% if (longtrainindo) %>
+            <td><%= link_to 'Cancel Ticket', longtraincancellation_path(longtrainindo), data: { confirm: 'Are you sure?' }, class: "btn btn-danger"%></td>
+            <% end %>
             </center>
           </div>
         </div>
-        <center>
-        <td><%= link_to 'Cancel Ticket', longtraincancellation_path(longtrainindo), data: { confirm: 'Are you sure?' },class: "btn btn-danger"%></td>
-        </center>
       </div>
     <% end %>
   </div>
